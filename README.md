@@ -21,16 +21,52 @@ We expect candidates to spend 1-3 hours on this exercise.
 
 **We want to see you flex your CS muscles!!! Use the appropriate data structures to satisfy the time and space complexities inherent to the problem!!!**
 
-## Pointers & Callouts
+## Solutions
 
-- We don't know how many logs each source contains. A source could contain millions of entries and be exabytes in size! In other words, reading the entirety of a log source into memory won't work well.
-- Log sources could contain logs from last year, from yesterday, even from 100 years ago. We won't know the timeframe of a log source until we start looking.
-- Consider what would happen when asked to merge 1 million log sources. Where might bottlenecks arise?
+1. **_Sort all logs(brute force)_**
+   - Create an array with N * k elements, k is the logSources count
+   - Sort the array and output all logs
+   - Time complexity `O(N * k * log(N*k))`
+   - Space complexity `O(N * k)`
+   - There isn't enough memory the store N*k logs,
+   this will not work
 
-There are two parts of the challenge which you'll see when diving into things. You can get started by running `npm start`.
+2. **_Merge sort_**
+   - Merge 2 sorted logSource, merge k/2 times
+   - Recursively merge logSources until all are merged
+   - Time complexity `O(N * k * log(k))`
+   - Space complexity `O(N * k)`
+   - Same issue as above with the space complexity 
 
-## Submitting
+3. **_Use min heap(Recommended)_**
+   - Create a min Heap and insert first element of all logSource,
+   in this particular demo, we insert the logSource instance into the Heap,
+   when we do heapify, we compare the **_log.last.date_** // k*log(k) for initial the heap
+   - Pop logSource from the heap and output the last log
+   - Update the last log of the popped logSource
+   - Add the logSource back the heap if logSource is not drained
+   - Keep doing it until the heap is empty // (N - 1) * k times loop
+   - Time complexity `O(N * k * log(k))`
+   - Space complexity `O(K)`
+   - This is the solution we use in the code
 
-Create a GitHub repo and email your point of contact the link.
+4. **_Use Binary search_**
+   - This is similar to min heap approach, the difference is that instead of using a heap,
+   we can use a sorted array and use binary search to insert new item
+   - Create an array and insert all logSource and sort by log.last.date. // `O(k*log(k))`
+   - Remove first logSource and output it
+   - Update the last log of the removed logSource
+   - Insert the logSource back the array using binary search if logSource is not drained
+   - Keep doing it until the array is empty // (N - 1) * k times Binary search loop
+   - Time complexity `O(N * k * log(k))`
+   - Space complexity `O(K)`
+   - This solution is similar to the min heap approach
 
-If - for whatever reason - you cannot create a GitHub repo for this challenge, it is also acceptable to 'zip' the directory and provide your submission as an email attachment.
+## Run Solutions
+set `sourceCount` to tun 
+`npm start`
+
+Tests are added for the min heap class
+`npm test`
+
+

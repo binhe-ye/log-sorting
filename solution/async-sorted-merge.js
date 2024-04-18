@@ -10,22 +10,44 @@ module.exports = async (logSources, printer) => {
       logsHeap.add(logSources[i]);
     }
 
-    //popAsync the smallest date log, wait until next log is pulled, then and add it back to heap
+    // popAsync the smallest date log, no need to wait it to fulfill
+    // the last and the drained value of the log is updated right away when popAsync is called
     try {
-      (async() => {
-        while(logsHeap.heap.length > 0) {
-          const minLog = logsHeap.remove();
-          printer.print(minLog.last);
-          await minLog.popAsync();
-          if (!minLog.drained) {
-            logsHeap.add(minLog);
-          }
+      while(logsHeap.heap.length > 0) {
+        const minLog = logsHeap.remove();
+        printer.print(minLog.last);
+        minLog.popAsync().then((log) => {
+          // process log data if needed in parallel with print
+        }).catch((e) => {
+          throw e;
+        })
+        if (!minLog.drained) {
+          logsHeap.add(minLog);
         }
-        printer.done();
-        resolve(() => console.log("Async sort complete."));
-      })();
+      }
+      printer.done();
+      resolve(console.log("Async sort complete."))
     } catch(e) {
       reject(e);
     }
   });
 };
+
+// recursive approach, works the same way
+const repeat = (logsHeap, printer) => {
+  if (logsHeap.heap.length < 1) {
+    return
+  }
+
+  const minLog = logsHeap.remove();
+  printer.print(minLog.last);
+  minLog.popAsync().then(() => {
+    // process logs
+  })
+
+  if (!minLog.drained) {
+    logsHeap.add(minLog);
+  }
+
+  repeat(logsHeap, printer)
+}

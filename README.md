@@ -1,6 +1,4 @@
-<img align="left" width="100px" height="100px" src="/assets/seso-eng-logo.png">
-
-# Seso Engineering | Challenge: Log Sorting
+Challenge: Log Sorting
 
 <br>
 
@@ -17,9 +15,6 @@ We have a number of [**log sources**](https://github.com/sesolabor/coding-challe
    - We don't need to store the log entries, just print them to stdout.
 1. Do this _efficiently_. There are time and space complexities afoot!
 
-We expect candidates to spend 1-3 hours on this exercise.
-
-**We want to see you flex your CS muscles!!! Use the appropriate data structures to satisfy the time and space complexities inherent to the problem!!!**
 
 ## Solutions
 
